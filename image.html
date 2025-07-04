@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sembunyikan Pesan Rahasia</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dark-bg: #1a1a2e; /* Warna latar belakang utama */
+      --dark-card: #16213e; /* Warna latar belakang kartu */
+      --text-color: #e0e0e0; /* Warna teks utama */
+      --accent-color: #e94560; /* Warna aksen untuk tombol/sorotan */
+      --secondary-accent: #0f3460; /* Warna aksen sekunder */
+      --border-color: rgba(255, 255, 255, 0.1); /* Warna border tipis */
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: var(--text-color);
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start; /* Sesuaikan agar konten tidak selalu di tengah vertikal */
+      min-height: 100vh;
+      padding: 30px 0; /* Tambahkan padding agar tidak terlalu mepet ke atas/bawah */
+    }
+
+    .container {
+      max-width: 900px; /* Lebar maksimal konten */
+      background-color: var(--dark-card);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      padding: 40px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+      border-bottom: none; /* Hilangkan border default Bootstrap */
+    }
+
+    .page-header h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      text-shadow: 0 0 10px rgba(233, 69, 96, 0.5); /* Efek glow ringan */
+    }
+
+    /* Tabs Styling */
+    .nav-tabs {
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 30px;
+      justify-content: center; /* Pusatkan tab */
+    }
+
+    .nav-tabs .nav-link {
+      color: var(--text-color);
+      border: none;
+      border-bottom: 3px solid transparent;
+      padding: 12px 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .nav-tabs .nav-link:hover {
+      color: var(--accent-color);
+      border-color: rgba(233, 69, 96, 0.5);
+      background-color: transparent;
+    }
+
+    .nav-tabs .nav-item.active .nav-link,
+    .nav-tabs .nav-link.active {
+      color: var(--accent-color);
+      border-color: var(--accent-color);
+      background-color: transparent;
+    }
+
+    /* Card Styling */
+    .card {
+      background-color: var(--dark-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .card h2 {
+      color: var(--text-color);
+      font-size: 2rem;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    /* Alert Styling */
+    .alert-info {
+      background-color: var(--secondary-accent);
+      border-color: var(--secondary-accent);
+      color: var(--text-color);
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .alert-info strong {
+      color: var(--accent-color);
+    }
+
+    /* Form Elements */
+    .form-control {
+      background-color: #2b2b4d; /* Warna input yang lebih gelap */
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      padding: 12px 15px;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-control::placeholder {
+      color: rgba(224, 224, 224, 0.6);
+    }
+
+    .form-control:focus {
+      background-color: #3a3a5c;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 0.25rem rgba(233, 69, 96, 0.25);
+      color: var(--text-color);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    /* Buttons */
+    .btn-primary { /* Menggunakan btn-primary untuk tombol utama, bisa custom lagi */
+      background-color: var(--accent-color);
+      border-color: var(--accent-color);
+      color: white;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+    }
+
+    .btn-primary:hover {
+      background-color: #d13a52; /* Warna sedikit lebih gelap saat hover */
+      border-color: #d13a52;
+      transform: translateY(-2px); /* Efek hover minor */
+      box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+    }
+
+    .btn-primary.pull-right { /* Sesuaikan untuk Bootstrap 5, gunakan d-flex justify-content-end */
+        float: right; /* Tetap pertahankan jika ada JS yang mengandalkan ini */
+    }
+
+    /* Canvas and Image Display */
+    .images div, .decode {
+      margin-top: 30px;
+      text-align: center;
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background-color: #212842; /* Latar belakang untuk area gambar */
+    }
+
+    .images h3, .decode h3 {
+      color: var(--text-color);
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    canvas {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid var(--accent-color); /* Border aksen untuk canvas */
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(233, 69, 96, 0.2);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      color: rgba(224, 224, 224, 0.6);
+    }
+
+    footer a {
+      color: var(--accent-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #fff;
+    }
+
+    /* Clearfix replacement for Bootstrap 5 */
+    .clearfix {
+      clear: both;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+      .page-header h1 {
+        font-size: 2.5rem;
+      }
+      .nav-tabs .nav-link {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="page-header">
+      <h1>ImageTools Online</h1>
+      <p class="lead" style="color: rgba(224, 224, 224, 0.7);">Sembunyikan pesan rahasia Anda di dalam gambar dengan aman.</p>
+    </header>
+
+    <ul class="nav nav-tabs justify-content-center" id="tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="encode-tab" data-bs-toggle="tab" href="#encode" role="tab" aria-controls="encode" aria-selected="true">Encode</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="decode-tab" data-bs-toggle="tab" href="#decode" role="tab" aria-controls="decode" aria-selected="false">Decode</a>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="my-tab-content">
+      <div class="tab-pane fade show active" id="encode" role="tabpanel" aria-labelledby="encode-tab">
+        <div class="card">
+          <h2>Encode Pesan Anda</h2>
+          <p class="alert alert-info">
+            Untuk menyembunyikan pesan di dalam gambar, pilih gambar yang ingin Anda gunakan, masukkan teks Anda, dan klik tombol <strong>Encode</strong>. <br/>
+            Simpan gambar yang dihasilkan, itu akan berisi pesan tersembunyi Anda. <br/>
+            Ingat, semakin banyak teks yang ingin Anda sembunyikan, semakin besar ukuran gambar yang harus digunakan. Jika gambar terlalu kecil, Anda akan diberitahu.<br/><br/>
+            Gambar maupun pesan yang Anda sembunyikan **tidak akan pernah dikirimkan melalui web**, semua proses terjadi di dalam browser Anda.
+          </p>
+          <form class="form">
+            <div class="mb-3">
+              <label for="baseFileEncode" class="form-label visually-hidden">Pilih Gambar</label>
+              <input class="form-control" type="file" id="baseFileEncode" name="baseFile" onchange="previewEncodeImage()">
+            </div>
+
+            <div class="mb-3">
+              <label for="messageEncode" class="form-label visually-hidden">Masukkan Pesan</label>
+              <textarea class="form-control message" id="messageEncode" rows="3" placeholder="Masukkan pesan rahasia Anda di sini"></textarea>
+            </div>
+
+            <div class="d-flex justify-content-end">
+              <button type="button" class="encode btn btn-primary" onclick="encodeMessage()">Encode</button>
+            </div>
+          </form>
+          <div class="clearfix"></div>
+        </div>
+
+        <div class="error alert alert-danger" style="display: none;"></div>
+        <div class="binary card" style="display: none;">
+          <h3>Representasi Biner Pesan Anda</h3>
+          <textarea class="form-control message" rows="5" style="word-wrap:break-word;" readonly></textarea>
+        </div>
+        <div class="images card" style="display: none;">
+          <div class="row">
+            <div class="col-md-4 original" style="display: none;">
+              <h3>Original</h3>
+              <canvas class="img-fluid"></canvas>
+            </div>
+            <div class="col-md-4 nulled" style="display: none;">
+              <h3>Normalisasi</h3>
+              <canvas class="img-fluid"></canvas>
+            </div>
+            <div class="col-md-4 message" style="display: none;">
+              <h3>Pesan Tersembunyi (Klik Kanan <span class="glyphicon glyphicon-arrow-right"></span> Simpan Gambar)</h3>
+              <canvas class="img-fluid"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="decode" role="tabpanel" aria-labelledby="decode-tab">
+        <div class="card">
+          <h2>Decode Gambar</h2>
+          <p class="alert alert-info">
+            Untuk membaca pesan tersembunyi dari gambar, cukup pilih gambar yang berisi pesan dan klik tombol <strong>Decode</strong>.<br/><br/>
+            Gambar maupun pesan yang tersembunyi **tidak akan pernah dikirimkan melalui web**, semua proses terjadi di dalam browser Anda.
+          </p>
+          <form class="form">
+            <div class="mb-3">
+              <label for="decodeFile" class="form-label visually-hidden">Pilih Gambar untuk Decode</label>
+              <input class="form-control" type="file" id="decodeFile" name="decodeFile" onchange="previewDecodeImage()">
+            </div>
+            <div class="d-flex justify-content-end">
+              <button type="button" class="decode btn btn-primary" onclick="decodeMessage()">Decode</button>
+            </div>
+          </form>
+          <div class="clearfix"></div>
+        </div>
+        <div class="binary-decode card" style="display: none;">
+          <h3>Pesan Tersembunyi</h3>
+          <textarea class="form-control message" rows="5" style="word-wrap:break-word;" readonly></textarea>
+        </div>
+        <div class="decode card" style="display: none;">
+          <h3>Gambar Input</h3>
+          <canvas class="img-fluid"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <footer class="mt-5">
+      &copy; 2014 by <a href="mailto:stylesuxx@gmail.com" target="_blank" rel="noopener noreferrer">stylesuxx</a>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script type="text/JavaScript" src="script.js"></script>
+</body>
+</html>
